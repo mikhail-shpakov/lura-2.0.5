@@ -1,4 +1,4 @@
-module github.com/luraproject/lura/v2
+module github.com/mikhail-shpakov/lura-2.0.5
 
 go 1.17
 

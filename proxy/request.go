@@ -31,6 +31,12 @@ func (r *Request) GeneratePath(URLPattern string) {
 		key = append(key, "{{."...)
 		key = append(key, k...)
 		key = append(key, "}}"...)
+    // Remove leading slash from the wildcard parameter,
+    // since the url_pattern already has the slash before the
+    // wildcard parameter name:
+    if len(v) > 0 && v[0] == '/' {
+      v = v[1:]
+    }
 		buff = bytes.ReplaceAll(buff, key, []byte(v))
 	}
 	r.Path = string(buff)

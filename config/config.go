@@ -429,6 +429,7 @@ func (s *ServiceConfig) initEndpoints() error {
 			inputSet[inputParams[ip]] = nil
 		}
 
+    s.addWildcardPlaceHoldersFromURLTemplate(e.Endpoint, inputSet)
 		e.Endpoint = s.uriParser.GetEndpointPath(e.Endpoint, inputParams)
 
 		s.initEndpointDefaults(i)
@@ -466,6 +467,15 @@ func (*ServiceConfig) extractPlaceHoldersFromURLTemplate(subject string, pattern
 		keys[k] = v[1]
 	}
 	return keys
+}
+
+var wildcardPattern = regexp.MustCompile(`/\*([a-zA-Z\-_0-9]+)`)
+
+func (s *ServiceConfig) addWildcardPlaceHoldersFromURLTemplate(subject string, inputSet map[string]interface{}) {
+	matches := wildcardPattern.FindAllStringSubmatch(subject, -1)
+	for _, v := range matches {
+		inputSet[v[1]] = nil
+	}
 }
 
 func (s *ServiceConfig) initEndpointDefaults(e int) {
